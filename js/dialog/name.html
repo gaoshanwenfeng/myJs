@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+	<script type="text/javascript" src="jquery.js"></script>
+  <script type="text/javascript" src="common.js"></script>
+	<script type="text/javascript" src="dialog.js"></script>
+
+
+</head>
+
+<body>
+
+<input  type="button" value="弹出" onclick="openLogin();"  />
+
+<div id="assembleSuccessDiv" style="display:none; with:240px;height:120px;">
+    <div class="openDiv w300" >
+		<p class="clearfix p15 pt5 tc bd-b-d3">
+			<span class="ico-right-b"></span>
+	    	<span class="ES-title ml10"><span class="c-069">成功</span></span>
+	    </p>
+        <div class="ml10 mt10">
+            <p class="mt15 tc">
+                <input type="button" onclick="" class="btn-light-orange-lang" value="已完成付款"/>
+            </p>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+	function openLogin() {
+    openNewDiv('assembleSuccessDiv', 450, 261, 'newIn');
+
+  }
+
+</script>
+
+
+</body>
+</html>
