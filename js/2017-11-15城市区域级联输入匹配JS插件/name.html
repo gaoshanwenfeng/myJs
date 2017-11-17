@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<script src="jquery.js"></script>
+<script src="common.js"></script>
+<script src="CitySuggest.js"></script>
+</head>
+
+<body>
+<div style="margin-top:100px; border:1px solid #f00; padding:10px;">
+区域或城市<input id="input_area" type="text" value="请输入中文或拼音" onclick="PT.inputCue(this,'请输入中文或拼音');this.value='';" onblur="NameSuggest.hide()" />
+</div>
+
+<div style="margin-top:100px; border:1px solid #f00; padding:10px;">
+区域或城市<input id="input_area2" type="text" value="请输入中文或拼音" onclick="PT.inputCue(this,'请输入中文或拼音');this.value='';" onblur="NameSuggest.hide()" />
+
+</div>
+
+
+</body>
+
+
+<script>
+
+var oCityList={
+		countryList:[
+		{code:"CN", name:"中国", spell:"zhongguo"},
+		{code:"US", name:"美国", spell:"meiguo"},
+		],
+		provinceList:[
+		{code:"1", name:"北京市", spell:"beijingshi",pCode:"CN"},
+		{code:"2", name:"上海市", spell:"shanghaishi",pCode:"CN"},
+		{code:"3", name:"洛杉矶", spell:"luoshanji",pCode:"US"}
+		],
+		
+		cityList:[
+		{code:"1", name:"北京", spell:"beijing",  pCode:"1" , gCode:"CN",lev:"3"},
+		{code:"2", name:"上海", spell:"shanghai", pCode:"2" , gCode:"CN",lev:"3"},
+		{code:"3", name:"洛杉", spell:"luoshanji", pCode:"3" , gCode:"US",lev:"3"}
+		],
+		areaList:[
+		{code:"2121",name:"海淀区",spell:"haidianqu", pCode:"1",gCode:"1",lev:"4"},
+		{code:"2122",name:"朝阳区",spell:"chaoyangqu", pCode:"1",gCode:"1",lev:"4"},
+		{code:"2124",name:"黄浦区",spell:"huangpuqu", pCode:"2",gCode:"2",lev:"4"},
+		{code:"2125",name:"洛杉区",spell:"luoshanji", pCode:"3",gCode:"3",lev:"4"}
+		]
+	};
+
+
+var oCitySuggest1=new CitySuggest({inputId:"input_area",data:oCityList,clickEvt:function(o){console.log("自定义函数1");console.log(o);}});
+var oCitySuggest2=new CitySuggest({inputId:"input_area2",data:oCityList,clickEvt:function(o){console.log("自定义函数2");console.log(o);}});
+
+//oCitySuggest1.returnVal{name:""}
+</script>
+
+</html>
