@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+
+  <script type="text/javascript" src="artDialog4.1.6/artDialog.js?skin=blue"></script>
+	<script type="text/javascript" src="artDialog4.1.6/plugins/iframeTools.source.js"></script>
+
+</head>
+
+<body>
+
+<input  type="button" value="弹出" onclick="openPicUploadDiv();" placeholder="有效时间" />
+
+
+<div id="imageSelectOrUploadDiv" style="display: none;">
+    <div id="imageSource" style="width:520px;" class="bd-ddd p20">
+        <img id="addCoverImage" height="180" width="140"  src="" />
+		<form method="post" id="uploadForm" action="/poibasehotel/hotel/coverpic/upload.go" enctype="multipart/form-data">
+			<input type="file" align="right" name="uploadImage" id="uploadImage" />
+			<input id="pic-btn" class="btn-page" type="button" onclick="uploadConverPic();" value="上传图片">
+			<font color="red">图片格式：jpg、gif</font>
+		</form>
+	</div>
+ </div>
+</div>
+
+<script type="text/javascript">
+//弹出上传或选择div
+function openPicUploadDiv(){
+	var baseImageUploadOrSearch = $("#imageSelectOrUploadDiv").html();
+
+	art.dialog({
+		title : "上传图片",
+		content : baseImageUploadOrSearch,
+		okVal : '确定',
+		ok: function () {
+			 alert ('点击确认')
+			return true;
+	    },
+		cancelVal : '关闭',
+		width: 480,
+		cancel : true,
+		fixed : true,
+		lock : true,
+		opacity : 0.1,
+		show : true,
+		init : function() {
+			
+		}
+	});
+}
+</script>	
+</body>
+</html>
