@@ -12,7 +12,7 @@ var JqSuggest = function(o){
 	_this.hideId = o.hideId;
 	_this.dataArray = o.dataArray;
 	if (o.itemClickEvt) {
-		_this.itemClickEvt = itemClickEvt;
+		_this.itemClickEvt = o.itemClickEvt;
 	}
 	
 	//Save
