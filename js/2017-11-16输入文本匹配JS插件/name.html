@@ -5,15 +5,18 @@
 <title>无标题文档</title>
 <script src="jquery.js"></script>
 <script src="common.js"></script>
+<script src="suggest.js"></script>
 </head>
 
 <body>
 <input id="pCode" type="text" value="" placeholder="隐藏域的值" />
 <input id="pName" type="text" value="" placeholder="请输入键字" />
 
+<input id="sanCode" type="text" value="" placeholder="隐藏域" />
+<input id="sanName" type="text" value="" placeholder="请输入" />
 
 <script type="text/javascript">
-var jsonArray= [
+var dataArray = [
 	{code:"1", text:"小才",spell:"liming"},
 	{code:"2", text:"小才",spell:"limai"},
 	{code:"3", text:"李明",spell:"mi"},
@@ -32,243 +35,36 @@ var jsonArray= [
 	{code:"14", text:"点才",spell:"liming"}
 ]
 
-	
-	
-
-
-
-var JqSuggest = function(o){
-	var _this = this;
-	_this.targetId = o.targetId;
-	_this.hideId = o.hideId;
-	_this.dataArray = o.dataArray;
-	_this.hideValType = o.hideValType;
-
-	JqSuggest.arrInputTarget.push(o.targetId);
-	
-	getAbsPoint = function(o) { 
-		//获取DOM对象的绝对位置  
-    var x = o.offsetLeft;   
-    var y = o.offsetTop;   
-    while(o = o.offsetParent) {   
-        x += o.offsetLeft;   
-        y += o.offsetTop;   
-    }   
-    return {x:x,y:y};
-  }	
-	
-	showSuggestDiv = function(evt){
-		  var msg='';
-		  $("#JqSuggest").empty();
-		  var tar = $("#"+o.targetId)[0];
-		  var pos = getAbsPoint(tar);
-			$("#JqSuggest").show().css({left:pos.x + "px", top:pos.y + tar.clientHeight + 2 + "px"});
-			if (o.dataArray && o.dataArray.length > 0) {
-					var len = o.dataArray.length;
-					var itemNumber = 0;
-					for(var i = 0; i < len; i++){
-							var ele = jsonArray[i];
-							msg = '<li>';
-							msg += '<span class="pCode">' + ele.code + '</span>';
-							msg += '<span class="pText">' + ele.text + '</span>';
-							if (ele.spell) {
-								msg += '<span class="pSpell">' + ele.spell + '</span>';
-							}
-							msg += '</li>';
-							$("#JqSuggest").append(msg);
-							
-							itemNumber ++;
-							if (itemNumber > JqSuggest.showMaxItemSize) {
-								 break;
-							}
-				  }
-			}
-
-			if ($("#JqSuggest li").length > 15 ){
-				$("#JqSuggest").css({height:"250px",overflow:"auto"});
-			} else {
-				$("#JqSuggest").css({height:"auto",overflow:"hidden"});
-			}
-			$("#JqSuggest li").hover(function(){$(this).addClass("hover");},function(){$(this).removeClass("hover");});
-			
-			$("#JqSuggest li").click(function() {
-					if(o.hideValType == "code" ){
-				   	//给隐藏域传code
-						$("#"+o.targetId).val($(this).find(".pText").text());
-						$("#"+o.hideId).val($(this).find(".pCode").text());
-				  }
-
-					$("#JqSuggest").hide();
-			});				
-				
-			if( msg == '') {
-				$("#JqSuggest").append('<li class="msg">对不起，没有找到&nbsp;'+val+'&nbsp;</li>');
-			}
-
-	};
-	
-	 $("#"+o.targetId).click(function(evt){
-			$("#"+o.targetId).val('');
-	   	$("#"+o.hideId).val('');	
-	});
-	
-	 $("#" + o.targetId).focusin(function(evt){
-	    showSuggestDiv(evt);
-	 });
-	 
-	 $("#" + o.targetId).blur(function(evt){
-	    JqSuggest.hide();
-	 });
-	 
-	 $("#" + o.targetId).keyup(function(evt){
-        var keycode;
-        if(!evt){
-        	var evt = window.event;
-        }
-        if(evt.keyCode){
-        	keycode = evt.keyCode;
-        } else if(evt.which){
-        	keycode = evt.which;
-        }
-        switch (evt.keyCode) {
-       		 case 38: // 向上方向键
-						return;
-            break;
-      	  case 40: // 向下方向键
-   					return;
-            break;
-          case 39: // 向右方向键
-            return;
-            break;
-          case 37: // 向左方向键
-            return;
-            break;    
-          case 13: // 对应回车键
-						return;
-          	break;
-          case 27: // 对应Esc键
-            return;
-            break;
-          default:
-						JqSuggest.getByTagertVal(o);				   
-		  	  	break;
-        }
-  	});
-}
-
-JqSuggest.showMaxItemSize = 15;
-//输入关键字匹配
-JqSuggest.getByTagertVal=function(o){
-	var val = $("#"+o.targetId).val();
-	val = $.trim(val).toLowerCase()
-	if(val==""){
-		$("#JqSuggest li.msg").html("");
-		$("#"+o.hideId).val(""); 
-		JqSuggest.showSuggestDiv({targetId:o.targetId,hideId:o.hideId,dataArray:o.dataArray,hideValType:o.hideValType}); 
-		return false;
-  }
-	$("#JqSuggest").empty();
-
-	if (o.dataArray && o.dataArray.length > 0) {
-			var dataArr = o.dataArray;
-		  var itemNumber = 0;
-			if (val) {
-				  var msg = '';
-				  var tar = $("#"+o.targetId)[0];
-					var pos = getAbsPoint(tar);
-					$("#JqSuggest").show().css({left:pos.x+"px",top:(pos.y + tar.clientHeight + 2)+"px"});
-					var len = o.dataArray.length;
-					for(var i = 0; i < len; i++){
-							var ele = jsonArray[i];
-							var text = ele.text;
-							var flag = text.indexOf(val);
-							if(flag > -1){
-								msg = '<li>';
-								msg += '<span class="pCode">' + ele.code + '</span>';
-								msg += '<span class="pText">' + text.substring(0,flag) + '<i>' + text.substring(flag, flag + val.length) + "</i>" + text.substring(flag+val.length, text.length) + '</span>';
-								if (ele.spell) {
-									msg += '<span class="pSpell">' + ele.spell + '</span>';
-								}
-								msg += '</li>';
-								
-								itemNumber++;
-								$("#JqSuggest").append(msg);
-							} else if(ele.spell && ele.spell.indexOf(val)> -1){
-								
-								msg = '<li>';
-								msg += '<span class="pCode">' + ele.code + '</span>';
-								msg += '<span class="pText">'+ text + '</span>';
-								if (ele.spell) {
-									msg += '<span class="pSpell">' + ele.spell + '</span>';
-								}
-								msg += '</li>';
-								itemNumber++;
-								$("#JqSuggest").append(msg);
-							}
-							
-							if (itemNumber > JqSuggest.showMaxItemSize) {
-							  	//如果记录太多，只显示前15条
-							 		break;
-							}
-					}
-			  		
-				  if ($("#JqSuggest li").length > 15 ){
-						$("#JqSuggest").css({height:"250px",overflow:"auto"});
-			    } else {
-			    	$("#JqSuggest").css({height:"auto",overflow:"hidden"});
-		   	  }
-			    $("#JqSuggest li").hover(function(){$(this).addClass("hover");},function(){$(this).removeClass("hover");});
-				  if( msg == '') {
-						$("#JqSuggest").append('<li class="msg">对不起，没有找到&nbsp;'+val+'&nbsp;</li>');
-			    }
-					$("#JqSuggest li").click(function() {
-							if(o.hideValType == "code" ){
-					   		//给隐藏域传code
-								$("#"+ o.targetId).val($(this).find(".pText").text());
-							  $("#"+ o.hideId).val($(this).find(".pCode").text());
-					    }	
-						  $("#JqSuggest").hide();
-					});	
-		 	} 
-	}
-
- 	if($("#JqSuggest li").length < 1 ){ 
- 		$("#JqSuggest").append('<li class="clearfix msg">对不起,没找到 "' + val + '" </li>');
- 	} else {
- 		$("#JqSuggest li").eq(1).addClass("hover");
- 	}
-	$("#JqSuggest li:not(:first)").hover(function(){$(this).addClass("hover")},function(){$(this).removeClass("hover")});
-}
-
-
-JqSuggest.arrInputTarget = new Array();
-
-JqSuggest.hide=function(){
-	setTimeout(function(){$("#JqSuggest").hide();},300);
-}
-	
-JqSuggest.creatUi=function(){
-	var css_str='<style>'
-	+'#JqSuggest{width:200px; margin:0; padding:0; font-size:12px; border:1px solid #FC0; position:absolute; background:#fff; z-index:9999;}'
-	+'#JqSuggest li{list-style:none; line-height:25px; height:25px; text-indent:0.5em; width:100%; cursor:pointer;}'
-	+'#JqSuggest li.hover{background:#FF9;}'
-	+'#JqSuggest .pText{float:left;}'
-	+'#JqSuggest .pText i{color:#f00; font-style:normal;}'
-	+'#JqSuggest .pSpell{float:right; margin-right:0.5em;}'
-	+'#JqSuggest .pCode{display:none;}'
-	+'</style>';
-	document.write(css_str+'<ul id="JqSuggest" style="display:none;"></ul>');	
-}
-JqSuggest.creatUi();	
+var dataArrayList = [
+	{code:"1", text:"小三才",spell:"liming"},
+	{code:"2", text:"三小才",spell:"limai"},
+	{code:"3", text:"三李明",spell:"mi"},
+	{code:"3", text:"三皓月",spell:"lisdming"},
+	{code:"4", text:"三天空",spell:"liming"},
+	{code:"5", text:"三五福",spell:"liming"},
+	{code:"6", text:"三宝石",spell:"hao"},
+	{code:"6", text:"三填充",spell:"liming"},
+	{code:"7", text:"三好的",spell:"liming"},
+	{code:"8",  text:"三小幅",spell:"liming"},
+	{code:"9",  text:"三小洪",spell:"liming"},
+	{code:"10", text:"三大王",spell:"liming"},
+	{code:"11", text:"三中文",spell:"liming"},
+	{code:"12", text:"三的才",spell:"liming"},
+	{code:"13", text:"三好才",spell:"liming"},
+	{code:"14", text:"三点才",spell:"liming"}
+]
 
 
 $(function(){
 	new JqSuggest({
 		  targetId:'pName',
 		  hideId:'pCode',
-		  hideValType:'code',
-			focusEvt:function(){},
-			dataArray:jsonArray
+			dataArray:dataArray
+	 });
+	 	new JqSuggest({
+		  targetId:'sanName',
+		  hideId:'sanCode',
+			dataArray:dataArrayList
 	 });
 });	
 </script>	
