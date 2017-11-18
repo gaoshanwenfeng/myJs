@@ -2,7 +2,8 @@
  * 	new JqSuggest({
 		  targetId:'pName',
 		  hideId:'pCode',
-		  dataArray:jsonArray
+		  dataArray:jsonArray,
+		  itemClickEvt:itemClickEvt
 	 });
  */
 var JqSuggest = function(o){
@@ -10,11 +11,12 @@ var JqSuggest = function(o){
 	_this.targetId = o.targetId;
 	_this.hideId = o.hideId;
 	_this.dataArray = o.dataArray;
+	if (o.itemClickEvt) {
+		_this.itemClickEvt = itemClickEvt;
+	}
 	
 	//Save
 	JqSuggest.putTarget(o);
-	
-	
 
 	showSuggestDiv = function(o){
 		  var msg='';
@@ -58,6 +60,9 @@ var JqSuggest = function(o){
 				$("#"+ o.targetId).val($(this).find(".pText").text());
 				$("#"+ o.hideId).val($(this).find(".pCode").text());
 				$("#JqSuggest").hide();
+				if (o.itemClickEvt) {
+					itemClickEvt(o);
+				}
 			});			
 				
 			if( msg == '') {
@@ -71,7 +76,7 @@ var JqSuggest = function(o){
 		if(val==""){
 			$("#JqSuggest li.msg").html("");
 			$("#"+o.hideId).val(""); 
-			showSuggestDiv({targetId:o.targetId,hideId:o.hideId,dataArray:o.dataArray}); 
+			showSuggestDiv(o); 
 			return false;
 	    }
 		$("#JqSuggest").empty();
@@ -130,6 +135,9 @@ var JqSuggest = function(o){
 					$("#"+o.targetId).val($(this).find(".pText").text());
 					$("#"+o.hideId).val($(this).find(".pCode").text());
 					$("#JqSuggest").hide();
+					if (o.itemClickEvt) {
+						itemClickEvt(o);
+					}
 				});	
 			    if( msg == '') {
 					$("#JqSuggest").append('<li class="msg">对不起，没有找到&nbsp;'+val+'&nbsp;</li>');
